@@ -1,19 +1,11 @@
 import React from 'react'
-const styles = {
-  titleBar: {
-    backgroundColor: 'black',
-    color: 'white'
-  },
-  date: {
-    color: 'blue',
-    backgroundColor: 'gray',
-    textAlign: 'center'
-  }
-}
-export default function App() {
+
+import { Todos } from './Todos'
+
+export default function App (props) {
+  const { state } = props
+
   return (
-    <div>
-      <h1 className="title-bar" style={styles.titleBar}>Hello from the cloud!</h1>
-    </div>
+    <Todos todos={state.todos} />
   )
 }

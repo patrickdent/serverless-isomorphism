@@ -18,8 +18,19 @@ const htmlData = `
 </body>
 </html>
 `
+
+const state = {
+  todos: [{
+    todo: 'build an isomorphic app',
+    complete: false
+  }],
+  updateTodo: () => console.log('update'),
+  addTodo: () => console.log('add'),
+  clearComplete: () => console.log('clear')
+}
+
 export const render = (req, res) => {
-  const html = ReactDOMServer.renderToString(<App />);
+  const html = ReactDOMServer.renderToString(<App state={state} />);
 
   return res.send(
     htmlData.replace('<div id="container"></div>', `<div id="container">${html}</div>`)
