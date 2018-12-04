@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import App from "./App/components/App";
+import App from "./components/App";
 
 const htmlData = `
 <html>
