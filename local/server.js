@@ -1,5 +1,6 @@
 const http = require('http')
 const express = require('express')
+const path = require('path')
 
 const port = 3000
 
@@ -11,12 +12,13 @@ const setUpApp = (functions) => {
 	  // Create an "httpsTrigger" for every export. We can do this by registering each of our Cloud Functions with our Express app using the `.get(routeName, function)` syntax. Since Google Cloud Functions are based off of Express we don't have to make any changes to the function we wrote in our index.js file.
     newApp.get(`/${func}`, functions[func])
   }
-  // newApp.use('/static', express.static(path.join(__dirname)))
+  // Deliver static assets from the build directory.
+  newApp.use(express.static(path.join('.', 'build')))
   return newApp
 }
 
 // Create the Express app with all of the Cloud Function handlers and add it as a listner on our Cloud Function emulation server.
-const initialApp = setUpApp(require('../App/cloud.js'))
+const initialApp = setUpApp(require('../src/cloud.js'))
 const server = http.createServer(initialApp)
 server.listen(port)
 
@@ -24,9 +26,9 @@ server.listen(port)
 let currentApp = initialApp
 
 if (module.hot) {
-  module.hot.accept('../App/cloud.js', () => {
+  module.hot.accept('../src/cloud.js', () => {
     // Create a new Express app with the updated Cloud Function handlers.
-    const newApp = setUpApp(require('../App/cloud.js'))
+    const newApp = setUpApp(require('../src/cloud.js'))
     // Remove the old Express app.
     server.removeListener('request', currentApp)
     // Register the new app with the server.
