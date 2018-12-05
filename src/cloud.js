@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import App from './components/App'
+import { Todos } from './components/Todos'
 import { TodoState } from './state/TodoState'
 
 const htmlData = `
@@ -29,7 +29,7 @@ const state = new TodoState([{
 const actions = {}
 
 export const render = (req, res) => {
-  const html = ReactDOMServer.renderToString(<App state={state}/>);
+  const html = ReactDOMServer.renderToString(<Todos state={state}/>);
 
   return res.send(
     htmlData.replace('<div id="container"></div>', `<div id="container">${html}</div>`)

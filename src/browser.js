@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, hydrate } from 'react-dom'
-import App from './components/App'
+import { Todos } from './components/Todos'
 import { TodoState } from './state/TodoState'
 
 const state = new TodoState([{
@@ -8,4 +8,4 @@ const state = new TodoState([{
   complete: false
 }])
 
-hydrate(<App state={state} />, document.getElementById('container'))
+hydrate(<Todos state={state} />, document.getElementById('container'))

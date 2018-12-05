@@ -10,7 +10,6 @@ class TodoState {
   }
 
   toggleComplete(todo) {
-    console.log(todo.complete)
     todo.complete = !todo.complete
   }
 
