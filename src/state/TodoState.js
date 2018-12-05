@@ -3,8 +3,8 @@ import * as Mobx from 'mobx'
 // This is the base class for all of our stores. It contains a constructor that
 // builds the store from a json object and an action to update attributes.
 class TodoState {
-  constructor (todos) {
-    this.todos = todos
+  constructor (initialState) {
+    Object.assign(this, initialState)
     this.addTodo = this.addTodo.bind(this)
     this.clearComplete = this.clearComplete.bind(this)
   }
