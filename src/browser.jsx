@@ -11,6 +11,7 @@ const rehydrateState = () => {
   const encodedState = window.localStorage.getItem('state')
   const initialStateString = Buffer.from(encodedState, 'base64').toString()
   const initialStateObject = JSON.parse(initialStateString)
+  console.log(initialStateObject)
   return new TodoState(initialStateObject)
 }
 const state = rehydrateState()

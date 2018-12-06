@@ -18,7 +18,7 @@ const setUpApp = (functions) => {
 }
 
 // Create the Express app with all of the Cloud Function handlers and add it as a listner on our Cloud Function emulation server.
-const initialApp = setUpApp(require('../src/cloud.js'))
+const initialApp = setUpApp(require('../src/cloud.jsx'))
 const server = http.createServer(initialApp)
 server.listen(port)
 
@@ -26,9 +26,9 @@ server.listen(port)
 let currentApp = initialApp
 
 if (module.hot) {
-  module.hot.accept('../src/cloud.js', () => {
+  module.hot.accept('../src/cloud.jsx', () => {
     // Create a new Express app with the updated Cloud Function handlers.
-    const newApp = setUpApp(require('../src/cloud.js'))
+    const newApp = setUpApp(require('../src/cloud.jsx'))
     // Remove the old Express app.
     server.removeListener('request', currentApp)
     // Register the new app with the server.

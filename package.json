@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "cd dist && gcloud beta functions deploy todo --runtime nodejs8 --trigger-http",
+    "setup": "chmod +x scripts/deploy.sh",
+    "deploy": "scripts/deploy.sh",
     "build": "webpack --config webpack.config.cloud.js && cp package.json dist",
     "local": "rm -rf ./build && webpack --config webpack.config.local.js"
   },

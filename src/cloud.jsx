@@ -22,6 +22,8 @@ const dehydrateState = (state) => {
   return Buffer.from(stringifiedStore).toString('base64')
 }
 
+const bundleUrl = process.env.NODE_ENV === 'production' ? 'https://storage.googleapis.com/todo-assets/browser.js' : 'browser.js'
+
 // This is the template for the source html we will be sending to the browser.
 // In it we have 3 important elements:
 // - a div element to insert the React html into
@@ -36,7 +38,7 @@ const htmlData = `
 </head>
 <body>
     <div id="container"></div>
-    <script type="text/javascript" src="browser.js"></script>
+    <script type="text/javascript" src='${bundleUrl}'></script>
     <script>
       window.localStorage.setItem('state','${dehydrateState(state)}');
     </script>
