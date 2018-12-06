@@ -2,18 +2,8 @@ const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require("webpack-node-externals")
 
-module.exports =  {
-  target: 'node',
-  node: {
-    __dirname: false
-  },
-  entry: ['./index.js'],
-  externals: [nodeExternals()],
-  output: {
-    libraryTarget: "commonjs",
-    filename: 'index.js'
-  },
-  mode: "development",
+const shared = {
+  mode: 'production',
   module: {
       rules: [{
         test: /.jsx$/,
@@ -32,3 +22,29 @@ module.exports =  {
     extensions: ['.js', '.jsx']
   }
 }
+
+const cloud = {
+  ...shared,
+  target: 'node',
+  node: {
+    __dirname: false
+  },
+  entry: './src/cloud.jsx',
+  externals: [nodeExternals()],
+  output: {
+    libraryTarget: "commonjs",
+    filename: 'index.js'
+  },
+}
+
+// This configuration bundles up our React app so that it can be served to the
+// browser.
+var browser = {
+  ...shared,
+  entry: './src/browser.jsx',
+  output: {
+    filename: 'browser.js'
+  }
+}
+
+module.exports = [cloud, browser]

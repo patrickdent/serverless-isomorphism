@@ -1,8 +1,10 @@
 import * as Mobx from 'mobx'
 
-// This is the base class for all of our stores. It contains a constructor that
-// builds the store from a json object and an action to update attributes.
+// This is a simple example of a Mobx store. We will use it to manage the state
+// of our app.
 class TodoState {
+  // The state is instantiated from a JSON object. This is so that we can easily
+  // seralize and deserailize the state between the server and the broswer.
   constructor (initialState) {
     Object.assign(this, initialState)
     this.addTodo = this.addTodo.bind(this)
@@ -22,8 +24,9 @@ class TodoState {
   }
 }
 
-// Once Javascript Decorators become a stable feature we can replace this with
-// the corresponding decorators.
+// This turns the class into a Mobx class, indicates which fields should be
+// observable (i.e. inform components when they update), and which methods
+// affect state (we don't use any features that depend on this in this demo).
 Mobx.decorate(
   TodoState,
   {

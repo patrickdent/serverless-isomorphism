@@ -6,6 +6,9 @@ import * as Mobx from 'mobx'
 import { Todos } from './components/Todos'
 import { TodoState } from './state/TodoState'
 
+// Here we simply define the state in a literal. For the sake of this demo,
+// let's pretend that we needed to use an API key to access our todo list and
+// thus have a reason to be doing server-side rendering.
 const state = new TodoState({
   todos: [{
     todo: 'build an isomorphic app',
@@ -19,17 +22,20 @@ const dehydrateState = (state) => {
   return Buffer.from(stringifiedStore).toString('base64')
 }
 
+// This is the template for the source html we will be sending to the browser.
+// In it we have 3 important elements:
+// - a div element to insert the React html into
+// - a script tag to retrieve our JavaScript so that our app runs in the browser
+// - a script to inject our encoded state into LocalStorage
 const htmlData = `
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Serverlessly Rendered</title>
+  <title>Serverlessly Rendered and Isomorphic</title>
 </head>
 <body>
-    <div class="container">
-      <div id="container"></div>
-    </div>
+    <div id="container"></div>
     <script type="text/javascript" src="browser.js"></script>
     <script>
       window.localStorage.setItem('state','${dehydrateState(state)}');
@@ -37,10 +43,17 @@ const htmlData = `
 </body>
 </html>
 `
-export const render = (req, res) => {
+
+const todo = (req, res) => {
   const html = ReactDOMServer.renderToString(<Todos state={state}/>);
 
   return res.send(
     htmlData.replace('<div id="container"></div>', `<div id="container">${html}</div>`)
   )
 }
+
+// Since we are rendering this in a Google Cloud Function, we use a named exoprt
+// that we can reference in our deploy script. This also makes it easy to use
+// this funtion in an Express app locally to emulate the cloud during
+// development (see local/server.js for more information on this).
+export { todo }

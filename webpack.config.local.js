@@ -3,31 +3,36 @@ const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const StartServerPlugin = require('start-server-webpack-plugin')
 
+const shared = {
+  mode: 'development',
+  watch: true,
+  module: {
+    rules: [{
+      test: /\.jsx?$/,
+      loader: 'babel-loader',
+      options: {
+        presets: ["@babel/react", ["@babel/preset-env", {"modules": false}]]
+      },
+      exclude: /node_modules/
+    }]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  }
+}
+
+// This configuration runs our local server for us and enable hot module
+// reloading while we are developing.
 const server = {
+  ...shared,
   entry: [
       'webpack/hot/poll?1000',
       './local/server'
   ],
-  watch: true,
-  mode: 'development',
   target: 'node',
   externals: [nodeExternals({
       whitelist: ['webpack/hot/poll?1000']
   })],
-  module: {
-      rules: [{
-          test: /\.jsx?$/,
-          loader: 'babel-loader',
-          options: {
-            presets: ["@babel/react", ["@babel/preset-env", {"modules": false}]]
-          },
-          exclude: /node_modules/
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
   plugins: [
       new StartServerPlugin('cloud.js'),
       new webpack.NamedModulesPlugin(),
@@ -45,28 +50,15 @@ const server = {
   }
 }
 
+// This configuration bundles up our React app so that it can be served to the
+// browser.
 var browser = {
-  entry: './src/browser.js',
-  watch: true,
+  ...shared,
+  entry: './src/browser.jsx',
   output: {
     path: path.join(__dirname, 'build'),
     filename: 'browser.js'
-  },
-  mode: 'development',
-  module: {
-    rules: [{
-      test: /\.jsx?$/,
-      loader: 'babel-loader',
-      options: {
-        presets: ["@babel/react", ["@babel/preset-env", {"modules": false}]]
-      },
-      exclude: /node_modules/
-    }]
-  },
-  resolve: {
-    extensions: ['.js', '.jsx']
-  },
-  stats: 'errors-only'
+  }
 }
 
 module.exports = [server, browser]
